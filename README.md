@@ -14,6 +14,10 @@ Este projeto implementa um pipeline completo de rastreamento ocular com:
 - heatmap dinamico de atencao visual
 - exportacao de eventos para analytics em NDJSON
 
+## Demonstracao
+
+![Demonstracao do sistema de Eye Tracking](assets/eye-tracking.gif)
+
 ## Principais Capacidades
 
 - Processamento em tempo real com captura assincrona.
