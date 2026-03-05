@@ -3,3 +3,7 @@ __pycache__/
 .venv/
 models/
 data/
+node_modules/
+.next/
+.vercel/
+out/
