@@ -9,8 +9,16 @@ import cv2
 import numpy as np
 
 
-@dataclass
+@dataclass(frozen=True, slots=True)
 class HeatmapConfig:
+    """Immutable configuration for HeatmapAccumulator.
+
+    Args:
+        height: Internal grid height (low-res for performance).
+        width: Internal grid width.
+        sigma: Gaussian kernel standard deviation in grid cells.
+        decay: Exponential decay rate (per second).
+    """
     height: int
     width: int
     sigma: float
@@ -68,7 +76,8 @@ class HeatmapAccumulator:
         if max_value <= 1e-5:
             return frame
         normalized = self.map / max_value
-        normalized = np.power(normalized, 0.6, dtype=np.float32)
+        # Gamma correction using inplace exponentiation (avoids extra allocation)
+        np.power(normalized, 0.6, out=normalized)
         heat = np.uint8(np.clip(normalized * 255.0, 0, 255))
         heat = cv2.resize(heat, (frame.shape[1], frame.shape[0]), interpolation=cv2.INTER_CUBIC)
         colored = cv2.applyColorMap(heat, cv2.COLORMAP_JET)
