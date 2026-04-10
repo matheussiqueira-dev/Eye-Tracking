@@ -67,6 +67,7 @@ export default function HomePage() {
           className={styles.heroPanel}
           label="ENCOM UI System"
           heading="Grid-Ready Command Center"
+          headingLevel={1}
         >
           <div className={`${styles.heroCopy} encom-fade-in`}>
             <span className={styles.kicker}>Tron Legacy visual layer</span>
@@ -147,7 +148,7 @@ export default function HomePage() {
       </section>
 
       <section className={styles.notes}>
-        <EncomPanel label="Deployment" heading="Vercel-safe implementation">
+        <EncomPanel label="Deployment" heading="Vercel-safe implementation" headingLevel={2}>
           <div className={styles.noteList}>
             <div className={styles.note}>
               Fonts are loaded through <code>next/font/google</code> to avoid manual asset
@@ -164,7 +165,7 @@ export default function HomePage() {
           </div>
         </EncomPanel>
 
-        <EncomPanel label="Scalability" heading="Extension points">
+        <EncomPanel label="Scalability" heading="Extension points" headingLevel={2}>
           <div className={styles.noteList}>
             <div className={styles.note}>
               Panels already cover dashboard, card, and container use cases. The same shell
