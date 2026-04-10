@@ -2,11 +2,29 @@
 
 import type { HTMLAttributes, ReactNode } from "react";
 
+function HeadingTag({
+  level,
+  className,
+  children,
+}: {
+  level: 1 | 2 | 3 | 4;
+  className?: string;
+  children: ReactNode;
+}) {
+  const Tag = (
+    { 1: "h1", 2: "h2", 3: "h3", 4: "h4" } as const
+  )[level];
+  return <Tag className={className}>{children}</Tag>;
+}
+
+
 import { cx } from "../../lib/cx";
 import styles from "./EncomPanel.module.css";
 
 export type EncomPanelProps = HTMLAttributes<HTMLElement> & {
   as?: "section" | "article" | "div";
+  /** Semantic heading level rendered inside the panel. Defaults to h2. */
+  headingLevel?: 1 | 2 | 3 | 4;
   label?: string;
   heading?: string;
   children: ReactNode;
@@ -30,7 +48,11 @@ export function EncomPanel({
         <header className={styles.header}>
           <div className={styles.copy}>
             {label ? <span className={styles.label}>{label}</span> : null}
-            {heading ? <h2 className={styles.heading}>{heading}</h2> : null}
+            {heading ? (
+            <HeadingTag level={headingLevel} className={styles.heading}>
+              {heading}
+            </HeadingTag>
+          ) : null}
           </div>
         </header>
       ) : null}
