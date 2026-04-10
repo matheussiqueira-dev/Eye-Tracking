@@ -26,6 +26,12 @@ type LinkProps = CommonProps &
 
 export type TronButtonProps = ButtonProps | LinkProps;
 
+/**
+ * Polymorphic Tron-styled button/link.
+ *
+ * Renders as an anchor when href is provided, otherwise as a button.
+ * Includes a sweep shimmer animation on hover via a CSS pseudo-element.
+ */
 export function TronButton(props: TronButtonProps) {
   const className = cx(styles.button, props.className);
 

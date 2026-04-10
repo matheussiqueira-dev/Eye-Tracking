@@ -16,6 +16,12 @@ export type TronCardProps = HTMLAttributes<HTMLElement> & {
   ctaLabel?: string;
 };
 
+/**
+ * Display card with ENCOM/Tron visual styling.
+ *
+ * Renders a thumbnail, eyebrow label, heading, description, optional tag
+ * badges, and an expandable diagnostics section.
+ */
 export function TronCard({
   eyebrow,
   heading,

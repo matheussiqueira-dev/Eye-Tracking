@@ -30,6 +30,12 @@ export type EncomPanelProps = HTMLAttributes<HTMLElement> & {
   children: ReactNode;
 };
 
+/**
+ * ENCOM-branded panel container with corner decorations and scan-line effect.
+ *
+ * Renders as section, article, or div (controlled by the as prop).
+ * Optionally displays a label badge and heading in a header row.
+ */
 export function EncomPanel({
   as = "section",
   label,
