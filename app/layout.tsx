@@ -73,9 +73,27 @@ export default function RootLayout({
   return (
     <html lang="pt-BR">
       <body className={`${orbitron.variable} ${rajdhani.variable} ${exo2.variable}`}>
+        <a
+          href="#main-content"
+          style={{
+            position: "absolute",
+            top: "-40px",
+            left: 0,
+            padding: "8px 16px",
+            background: "var(--encom-neon)",
+            color: "#000",
+            fontFamily: "var(--font-label)",
+            zIndex: 9999,
+            transition: "top 0.15s",
+          }}
+          onFocus={(e) => { (e.currentTarget as HTMLElement).style.top = "0"; }}
+          onBlur={(e) => { (e.currentTarget as HTMLElement).style.top = "-40px"; }}
+        >
+          Skip to content
+        </a>
         <BackgroundGrid />
         <div className="encom-shell">
-          <main className="encom-main">{children}</main>
+          <main id="main-content" className="encom-main">{children}</main>
           <Footer />
         </div>
         <WhatsAppButton />
