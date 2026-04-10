@@ -148,9 +148,11 @@ src/
 
 ## Licenca
 
-Defina a licenca desejada para distribuicao e uso comercial antes de publicar para terceiros.
+Este projeto esta licenciado sob a [MIT License](LICENSE).
 
 ## Autoria
 
-- Matheus Siqueira
-- Site: `wwww.matheussiqueira.dev`
+Desenvolvido por **Matheus Siqueira**
+
+- Site: [matheussiqueira.dev](https://www.matheussiqueira.dev/)
+- GitHub: [@matheussiqueira-dev](https://github.com/matheussiqueira-dev)
