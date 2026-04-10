@@ -6,6 +6,7 @@ import type {
   ReactNode,
 } from "react";
 
+import { cx } from "../../lib/cx";
 import styles from "./TronButton.module.css";
 
 type CommonProps = {
@@ -24,10 +25,6 @@ type LinkProps = CommonProps &
   };
 
 export type TronButtonProps = ButtonProps | LinkProps;
-
-function cx(...names: Array<string | false | null | undefined>) {
-  return names.filter(Boolean).join(" ");
-}
 
 export function TronButton(props: TronButtonProps) {
   const className = cx(styles.button, props.className);

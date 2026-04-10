@@ -2,6 +2,7 @@
 
 import type { HTMLAttributes, ReactNode } from "react";
 
+import { cx } from "../../lib/cx";
 import styles from "./EncomPanel.module.css";
 
 export type EncomPanelProps = HTMLAttributes<HTMLElement> & {
@@ -10,10 +11,6 @@ export type EncomPanelProps = HTMLAttributes<HTMLElement> & {
   heading?: string;
   children: ReactNode;
 };
-
-function cx(...names: Array<string | false | null | undefined>) {
-  return names.filter(Boolean).join(" ");
-}
 
 export function EncomPanel({
   as = "section",

@@ -2,6 +2,7 @@
 
 import type { HTMLAttributes } from "react";
 
+import { cx } from "../../lib/cx";
 import styles from "./TronCard.module.css";
 
 export type TronCardProps = HTMLAttributes<HTMLElement> & {
@@ -14,10 +15,6 @@ export type TronCardProps = HTMLAttributes<HTMLElement> & {
   ctaHref?: string;
   ctaLabel?: string;
 };
-
-function cx(...names: Array<string | false | null | undefined>) {
-  return names.filter(Boolean).join(" ");
-}
 
 export function TronCard({
   eyebrow,
