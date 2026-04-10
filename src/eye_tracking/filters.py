@@ -1,3 +1,5 @@
+"""Temporal filters: Low-pass, One Euro, Kalman, and GazeStabilizer fusion."""
+
 from __future__ import annotations
 
 import math
@@ -10,6 +12,11 @@ from .config import RuntimeConfig
 
 
 class LowPassFilter:
+    """Exponential moving average filter.
+
+    Args:
+        None — call apply() with the current value and alpha blend factor.
+    """
     def __init__(self) -> None:
         self._initialized = False
         self._value = 0.0
@@ -28,6 +35,16 @@ class LowPassFilter:
 
 
 class OneEuroFilter:
+    """One Euro adaptive low-pass filter for real-time signal smoothing.
+
+    The cutoff frequency adapts based on signal speed, reducing lag during
+    fast movements while heavily smoothing slow/stationary signals.
+
+    Args:
+        min_cutoff: Minimum cutoff frequency in Hz.
+        beta: Speed coefficient — higher values reduce lag at the cost of jitter.
+        d_cutoff: Derivative cutoff frequency in Hz.
+    """
     def __init__(self, min_cutoff: float = 1.0, beta: float = 0.0, d_cutoff: float = 1.0) -> None:
         self.min_cutoff = float(min_cutoff)
         self.beta = float(beta)
@@ -49,6 +66,14 @@ class OneEuroFilter:
 
 
 class GazeStabilizer:
+    """Combines Kalman filtering with One Euro smoothing for gaze stabilization.
+
+    The Kalman filter predicts and corrects under measurement noise while
+    the One Euro filter handles adaptive smoothing of the final output.
+
+    Args:
+        config: Runtime configuration carrying all filter hyperparameters.
+    """
     def __init__(self, config: RuntimeConfig) -> None:
         self.config = config
         self._filter_x = OneEuroFilter(

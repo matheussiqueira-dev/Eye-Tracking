@@ -1,3 +1,5 @@
+"""MediaPipe face landmark tracker with iris-based eye observation extraction."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -94,6 +96,7 @@ class FaceLandmarkTracker:
         tmp_path = model_dir / "face_landmarker.task.tmp"
         try:
             urlretrieve(cls.MODEL_URL, tmp_path)
+            _log.info("Model downloaded to %s", model_path)
             tmp_path.replace(model_path)
         finally:
             if tmp_path.exists():

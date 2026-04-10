@@ -1,3 +1,5 @@
+"""Calibration."""
+
 from __future__ import annotations
 
 import time
@@ -150,6 +152,6 @@ class CalibrationRoutine:
 
         cv2.circle(frame, (px, py), 16, (255, 255, 255), 2, cv2.LINE_AA)
         cv2.circle(frame, (px, py), 4, (0, 200, 255), -1, cv2.LINE_AA)
-        msg = f"Calibracao {self._index + 1}/{len(self.points)}: olhe para o ponto"
+        msg = f"Calibration {self._index + 1}/{len(self.points)}: look at the dot"
         cv2.putText(frame, msg, (30, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (20, 20, 20), 3, cv2.LINE_AA)
         cv2.putText(frame, msg, (30, 40), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 1, cv2.LINE_AA)

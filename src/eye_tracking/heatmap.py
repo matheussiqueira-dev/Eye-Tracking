@@ -1,3 +1,5 @@
+"""Gaze attention heatmap with Gaussian accumulation and temporal decay."""
+
 from __future__ import annotations
 
 from dataclasses import dataclass
@@ -16,6 +18,11 @@ class HeatmapConfig:
 
 
 class HeatmapAccumulator:
+    """Accumulates normalised gaze points into a Gaussian heatmap.
+
+    Each gaze point is stamped onto the internal grid with a Gaussian
+    blob.  The map decays exponentially so recent fixations dominate.
+    """
     def __init__(self, config: HeatmapConfig) -> None:
         self.config = config
         self.map = np.zeros((config.height, config.width), dtype=np.float32)
