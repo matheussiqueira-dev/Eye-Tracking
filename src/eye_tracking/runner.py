@@ -263,12 +263,26 @@ def build_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument("--no-debug", action="store_true", help="Disable debug overlay.")
     parser.add_argument("--no-heatmap", action="store_true", help="Disable heatmap overlay.")
     parser.add_argument("--log-events", type=str, default="", help="Optional NDJSON output path.")
+    parser.add_argument(
+        "--log-level",
+        type=str,
+        default="INFO",
+        choices=["DEBUG", "INFO", "WARNING", "ERROR"],
+        help="Python logging level (default: INFO).",
+    )
     return parser
 
 
 def main() -> None:
     parser = build_arg_parser()
     args = parser.parse_args()
+    import logging
+    logging.basicConfig(
+        level=getattr(logging, args.log_level),
+        format="%(asctime)s [%(levelname)-8s] %(name)s: %(message)s",
+        datefmt="%H:%M:%S",
+        force=True,
+    )
 
     config = RuntimeConfig(
         camera_id=args.camera_id,
