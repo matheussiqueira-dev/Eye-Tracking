@@ -9,6 +9,7 @@ description = "Real-time eye tracking with a regular webcam using MediaPipe and 
 readme = "README.md"
 license = { file = "LICENSE" }
 authors = [{ name = "Matheus Siqueira", email = "" }]
+urls = { Homepage = "https://www.matheussiqueira.dev/" }
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.26.0",

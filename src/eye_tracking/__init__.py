@@ -18,12 +18,20 @@ Example
     config = RuntimeConfig(camera_id=0, show_heatmap=True)
     app = EyeTrackingApp(config=config)
     app.run()
+
+Author
+------
+Matheus Siqueira — https://www.matheussiqueira.dev/
 """
 
 from .calibration import CalibrationRoutine, LinearCalibrator
 from .config import RuntimeConfig
 from .gaze import GazeEstimate, HeadPose
 from .runner import EyeTrackingApp
+
+__author__ = "Matheus Siqueira"
+__author_email__ = ""
+__url__ = "https://www.matheussiqueira.dev/"
 
 __all__ = [
     "RuntimeConfig",
