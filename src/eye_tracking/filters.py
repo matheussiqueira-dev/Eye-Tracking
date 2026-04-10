@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import logging
 import math
 from typing import Optional
 
@@ -9,6 +10,8 @@ import cv2
 import numpy as np
 
 from .config import RuntimeConfig
+
+_log = logging.getLogger(__name__)
 
 
 class LowPassFilter:
@@ -113,6 +116,7 @@ class GazeStabilizer:
             if self._last_valid is not None:
                 jump = float(np.linalg.norm(measurement - self._last_valid))
                 if jump > self.config.outlier_threshold and confidence < 0.7:
+                    _log.debug("Outlier rejected: jump=%.3f threshold=%.3f conf=%.2f", jump, self.config.outlier_threshold, confidence)
                     measurement = self._last_valid
             corrected = self._kalman.correct(measurement.reshape(2, 1))
             raw_xy = corrected[:2, 0].astype(np.float32)
