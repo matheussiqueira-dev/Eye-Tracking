@@ -25,9 +25,44 @@ const exo2 = Exo_2({
   weight: ["400", "500", "600"],
 });
 
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://eye-tracking.vercel.app";
+
 export const metadata: Metadata = {
-  title: "ENCOM Eye Tracking Interface",
-  description: "Tron Legacy inspired App Router interface for the Eye Tracking project.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "ENCOM Eye Tracking Interface",
+    template: "%s | ENCOM Eye Tracking",
+  },
+  description:
+    "Real-time eye tracking with a regular webcam — built with MediaPipe and OpenCV, presented through a Tron Legacy inspired interface.",
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: SITE_URL,
+    siteName: "ENCOM Eye Tracking",
+    title: "ENCOM Eye Tracking Interface",
+    description:
+      "Real-time eye tracking pipeline with calibration, heatmap, and gaze analytics.",
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "ENCOM Eye Tracking dashboard",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ENCOM Eye Tracking Interface",
+    description:
+      "Real-time eye tracking pipeline with calibration, heatmap, and gaze analytics.",
+    images: ["/og-image.png"],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
