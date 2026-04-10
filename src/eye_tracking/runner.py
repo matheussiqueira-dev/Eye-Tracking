@@ -1,7 +1,10 @@
+"""Main application runner: orchestrates the full eye-tracking pipeline."""
+
 from __future__ import annotations
 
 import argparse
 import json
+import logging
 import time
 from collections import deque
 from dataclasses import asdict, dataclass
@@ -18,6 +21,8 @@ from .filters import GazeStabilizer
 from .gaze import GazeEstimate, GazeEstimator, HeadPose
 from .heatmap import HeatmapAccumulator, HeatmapConfig
 from .landmarks import FaceLandmarkTracker, FaceObservation
+
+_log = logging.getLogger(__name__)
 
 
 @dataclass
@@ -124,12 +129,12 @@ class EyeTrackingApp:
             lines.append("Conf: 0.00")
 
         status = (
-            "CALIBRADO"
+            "CALIBRATED"
             if self.calibrator.is_ready
-            else ("CALIBRANDO" if self.calibration.active else "SEM CALIBRACAO")
+            else ("CALIBRATING" if self.calibration.active else "UNCALIBRATED")
         )
         lines.append(f"Modo: {status}")
-        lines.append("Teclas: C calibrar | H heatmap | D debug | R reset | Q sair")
+        lines.append("Keys: C calibrate | H heatmap | D debug | R reset | S save | Q quit")
 
         y = 26
         for text in lines:
@@ -138,11 +143,12 @@ class EyeTrackingApp:
             y += 22
 
         if self._calibration_done_at > 0 and (time.perf_counter() - self._calibration_done_at) < 2.0:
-            msg = "Calibracao concluida"
+            msg = "Calibration complete"
             cv2.putText(frame, msg, (width - 290, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (10, 10, 10), 3, cv2.LINE_AA)
             cv2.putText(frame, msg, (width - 290, 34), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (60, 255, 130), 1, cv2.LINE_AA)
 
     def run(self) -> None:
+        _log.info("Starting eye-tracking app (camera=%d).", self.config.camera_id)
         self.camera.start()
         last_ts = time.perf_counter()
         show_debug = self.config.show_debug
@@ -183,6 +189,7 @@ class EyeTrackingApp:
                     self.calibration.update(estimate.raw_features)
                     if self.calibration.consume_finished_flag():
                         self._calibration_done_at = time.perf_counter()
+                        _log.info("Calibration completed.")
                 else:
                     self.calibration.update(None)
 
@@ -228,8 +235,11 @@ class EyeTrackingApp:
                     self.heatmap.reset()
                     self.calibrator.reset()
                 if key == ord("s"):
-                    filename = f"heatmap_{int(time.time())}.png"
-                    cv2.imwrite(filename, self.heatmap.overlay(frame.copy()))
+                    save_dir = Path("screenshots")
+                    save_dir.mkdir(exist_ok=True)
+                    filename = save_dir / f"heatmap_{int(time.time())}.png"
+                    cv2.imwrite(str(filename), self.heatmap.overlay(frame.copy()))
+                    _log.info("Heatmap saved to %s", filename)
 
         finally:
             self.logger.close()
