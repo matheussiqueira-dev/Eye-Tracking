@@ -50,8 +50,13 @@ class EventLogger:
 
     def close(self) -> None:
         if self._file is not None:
-            self._file.close()
-            self._file = None
+            try:
+                self._file.flush()
+                self._file.close()
+            except OSError as exc:
+                _log.warning("Error closing event log: %s", exc)
+            finally:
+                self._file = None
 
 
 class EyeTrackingApp:
