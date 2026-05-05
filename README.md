@@ -1,158 +1,116 @@
-# Eye Tracking em Tempo Real com Webcam
+# Eye Tracking UX Intelligence
 
-Sistema de Eye Tracking em tempo real para webcam comum, sem hardware proprietario, com foco em analise comportamental, alta taxa de frames e arquitetura extensivel para uso em produto.
+Desenvolvido por Matheus Siqueira - www.matheussiqueira.dev
 
-## Visao Geral
+Eye Tracking UX Intelligence is a browser-based UX analytics prototype that turns a regular webcam into a real-time attention analysis surface. It uses webcam Web APIs, MediaPipe Face Landmarker, vector-based gaze estimation and Canvas rendering to capture approximate attention points and build heatmaps for UX research sessions.
 
-Este projeto implementa um pipeline completo de rastreamento ocular com:
+This project is an advanced prototype. It does not provide clinical, biometric or scientific-grade gaze accuracy.
 
-- deteccao facial e landmarks com MediaPipe
-- modelagem vetorial de iris por olho
-- estimativa de direcao do olhar com compensacao de pose de cabeca
-- calibracao supervisionada (9 pontos)
-- estabilizacao temporal com filtros de baixa latencia
-- heatmap dinamico de atencao visual
-- exportacao de eventos para analytics em NDJSON
+## Features
 
-## Demonstracao
+- Webcam permission flow with explicit unsupported, denied and unavailable camera states.
+- Real-time webcam preview.
+- Client-side face and ocular landmark detection with `@mediapipe/tasks-vision`.
+- Approximate gaze estimation from iris and eye landmarks.
+- Live visual indicator for the estimated attention point.
+- Real-time Canvas heatmap accumulation.
+- Session controls for start, pause, stop and reset.
+- Metrics for session time, captured points, most observed area, gaze stability and capture rate.
+- Session history with recent events and samples.
+- Export to JSON, CSV and PNG heatmap.
+- Next.js App Router, TypeScript, Tailwind CSS v4, ESLint, Prettier and Jest.
 
-![Demonstracao do sistema de Eye Tracking](assets/eye-tracking.gif)
+## Architecture
 
-## Principais Capacidades
-
-- Processamento em tempo real com captura assincrona.
-- Fusao binocular com peso por confianca.
-- Fallback para pose da cabeca em cenarios de oclusao parcial.
-- Rejeicao de outliers para reduzir jitter.
-- Persistencia de eventos de gaze para analise offline e BI.
-
-## Arquitetura
-
-```text
-Camera (Async) -> Face/Landmarks -> Gaze Estimation -> Stabilization -> Heatmap -> UI + Event Log
-```
-
-Componentes:
-
-- `capture.py`: leitura assincrona da webcam com buffer reduzido.
-- `landmarks.py`: deteccao de face e landmarks de olhos/iris.
-- `gaze.py`: pose da cabeca (`solvePnP`) + estimativa de gaze.
-- `filters.py`: One Euro + Kalman + controle de outlier.
-- `calibration.py`: rotina de calibracao e regressao linear regularizada.
-- `heatmap.py`: acumulador temporal com kernel gaussiano.
-- `runner.py`: orquestracao do pipeline, debug overlay e atalhos.
-
-## Requisitos
-
-- Python 3.10 a 3.12
-- Webcam USB ou integrada
-- Windows, Linux ou macOS
-
-Dependencias principais:
-
-- `opencv-python`
-- `mediapipe`
-- `numpy`
-
-## Instalacao
-
-```bash
-python -m venv .venv
-.venv\Scripts\activate
-pip install -r requirements.txt
-```
-
-## Execucao
-
-Comando recomendado:
-
-```bash
-python run.py --camera-id 0 --width 1280 --height 720 --target-fps 120
-```
-
-Exemplo para webcam externa (ex.: Brio 305):
-
-```bash
-python run.py --camera-id 1 --width 1920 --height 1080 --target-fps 120
-```
-
-## Parametros de Linha de Comando
-
-- `--camera-id`: indice da camera no sistema.
-- `--width`: largura de captura.
-- `--height`: altura de captura.
-- `--target-fps`: FPS solicitado ao driver da camera.
-- `--process-every-n`: processa inferencia completa a cada N frames.
-- `--no-debug`: desativa overlays de diagnostico.
-- `--no-heatmap`: desativa sobreposicao do heatmap.
-- `--log-events`: caminho para exportar eventos em NDJSON.
-
-## Atalhos em Runtime
-
-- `C`: iniciar calibracao (9 pontos).
-- `H`: alternar heatmap.
-- `D`: alternar debug overlay.
-- `R`: resetar calibracao e heatmap.
-- `S`: salvar screenshot com heatmap.
-- `Q` ou `ESC`: encerrar aplicacao.
-
-## Pipeline de Processamento
-
-1. Captura assincrona do frame.
-2. Deteccao de face e landmarks.
-3. Extracao vetorial da posicao da iris por olho.
-4. Estimativa de pose da cabeca.
-5. Fusao binocular e estimativa do ponto de gaze.
-6. Aplicacao de filtros temporais e controle de confianca.
-7. Acumulacao no heatmap com decaimento temporal.
-8. Emissao de evento estruturado para armazenamento.
-
-## Estrutura do Projeto
-
-```text
-run.py
-requirements.txt
-README.md
+```txt
 src/
-  eye_tracking/
-    __init__.py
-    calibration.py
-    capture.py
-    config.py
-    filters.py
-    gaze.py
-    heatmap.py
-    landmarks.py
-    runner.py
+  app/
+    globals.css
+    layout.tsx
+    page.tsx
+  components/
+    layout/
+      Header.tsx
+      Footer.tsx
+    eye-tracking/
+      CameraPreview.tsx
+      EyeTrackingDashboard.tsx
+      HeatmapCanvas.tsx
+      MetricsCards.tsx
+      ModelStatusPanel.tsx
+      SessionTimeline.tsx
+      TrackingControls.tsx
+    ui/
+      Badge.tsx
+      Button.tsx
+      Card.tsx
+      Section.tsx
+  hooks/
+    useCamera.ts
+    useEyeTracking.ts
+    useHeatmap.ts
+    useSessionMetrics.ts
+  lib/
+    eye-tracking/
+      gaze-estimator.ts
+      heatmap-utils.ts
+      session-exporter.ts
+      vector-utils.ts
+    constants.ts
+    utils.ts
+  tests/
+    gaze-estimator.test.ts
+    heatmap-utils.test.ts
+    session-exporter.test.ts
+    tracking-controls.test.tsx
+  types/
+    eye-tracking.ts
 ```
 
-## Desempenho
+## Getting Started
 
-- Em CPU comum, 60+ FPS e viavel.
-- Em hardware mais robusto e com tuning, pode subir significativamente.
-- `process_every_n`, resolucao e qualidade da webcam sao os principais controles de performance.
-- Para cenarios extremos de baixa latencia, recomenda-se acelerar inferencia com ONNX/TensorRT e migrar partes criticas para C++/Rust.
+```bash
+npm install
+npm run dev
+```
 
-## Limitacoes Conhecidas
+Open `http://127.0.0.1:3000`.
 
-- Precisao depende de iluminacao, posicao da camera e etapa de calibracao.
-- Oculos com reflexo intenso podem reduzir confianca de landmarks.
-- Sem calibracao, o mapeamento e aproximado.
+For webcam access, use `localhost`, `127.0.0.1` or HTTPS. Modern browsers block camera access on insecure remote origins.
 
-## Roadmap de Producao
+## Quality Commands
 
-- Servico de eventos em streaming (Kafka/Redpanda).
-- Dashboard analitico com mapas de atencao por sessao.
-- Testes automatizados de regressao de gaze.
-- Observabilidade (latencia p95, uptime de tracking, confianca media).
+```bash
+npm run lint
+npm run type-check
+npm run test
+npm run build
+```
 
-## Licenca
+## Vercel Deploy
 
-Este projeto esta licenciado sob a [MIT License](LICENSE).
+The app is compatible with Vercel zero-config Next.js deployments.
 
-## Autoria
+Required environment variables: none.
 
-Desenvolvido por **Matheus Siqueira**
+Optional environment variables:
 
-- Site: [matheussiqueira.dev](https://www.matheussiqueira.dev/)
-- GitHub: [@matheussiqueira-dev](https://github.com/matheussiqueira-dev)
+```bash
+NEXT_PUBLIC_SITE_URL=https://your-production-domain.com
+```
+
+The MediaPipe model and WASM runtime are loaded from public Google/CDN URLs configured in `src/lib/constants.ts`.
+
+## Export Format
+
+CSV columns:
+
+```txt
+timestamp,x,y,confidence,sessionId
+```
+
+JSON includes export metadata, total points and all captured gaze points.
+
+## Credits
+
+Desenvolvido por Matheus Siqueira - www.matheussiqueira.dev

@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: "Geist", "Geist Fallback", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "Geist Mono", "Geist Mono Fallback", ui-monospace, monospace;
+  --color-background: #071013;
+  --color-foreground: #f7fbff;
+}
+
+:root {
+  color-scheme: dark;
+  background: var(--color-background);
+  color: var(--color-foreground);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  min-width: 320px;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  background:
+    linear-gradient(rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+    linear-gradient(135deg, #071013 0%, #111827 44%, #132018 100%);
+  background-size:
+    44px 44px,
+    44px 44px,
+    auto;
+  color: var(--color-foreground);
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+::selection {
+  background: rgba(45, 212, 191, 0.35);
+}
+
+.heatmap-canvas {
+  image-rendering: auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

@@ -1,14 +1,12 @@
-__pycache__/
-*.pyc
-.venv/
-models/
-data/
 node_modules/
 .next/
-.vercel/
+.swc/
 out/
-.vercel
-
-# Local environment
+.vercel/
+coverage/
+dev-server*.log
+*.tsbuildinfo
 .env.local
 .env.*.local
+dist/
+build/
